@@ -14,6 +14,17 @@
       "description": "Đọc truyện trên Tiệm Truyện Chữ",
       "type": "novel",
       "locale": "vi_VN"
+    },
+    {
+      "name": "Truyencv.io",
+      "author": "Yangio-Thắng vibe",
+      "path": "https://raw.githubusercontent.com/yangio2005/ext-vbook/main/truyencv.io/plugin.zip",
+      "version": 5,
+      "source": "https://www.truyencv.io",
+      "icon": "https://raw.githubusercontent.com/yangio2005/ext-vbook/main/truyencv.io/icon.png",
+      "description": "Đọc truyện trên Truyencv.io",
+      "type": "novel",
+      "locale": "vi_VN"
     }
   ]
 }
