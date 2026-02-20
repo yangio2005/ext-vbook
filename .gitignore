@@ -1,6 +1,8 @@
+# Intellij
+.idea/*
+*.iml
+*test.json
+data.json
+history.bak
 .DS_Store
-Thumbs.db
-*.log
-*.tmp
-.vscode/
-.idea/
+/metruyenchu/src
