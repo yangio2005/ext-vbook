@@ -1,0 +1,21 @@
+{
+  "metadata": {
+    "name": "Tiệm Truyện Chữ",
+    "author": "Antigravity",
+    "version": 1,
+    "source": "https://www.tiemtruyenchu.com",
+    "regexp": "(www.)?tiemtruyenchu.com/truyen/[^/]+/?$",
+    "description": "Đọc truyện trên Tiệm Truyện Chữ",
+    "locale": "vi_VN",
+    "type": "novel",
+    "language": "javascript"
+  },
+  "script": {
+    "home": "home.js",
+    "genre": "genre.js",
+    "detail": "detail.js",
+    "search": "search.js",
+    "toc": "toc.js",
+    "chap": "chap.js"
+  }
+}
