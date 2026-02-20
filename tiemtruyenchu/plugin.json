@@ -1,8 +1,8 @@
 {
   "metadata": {
     "name": "Tiệm Truyện Chữ",
-    "author": "Antigravity",
-    "version": 1,
+    "author": "Yangio-Thắng vibe",
+    "version": 5,
     "source": "https://www.tiemtruyenchu.com",
     "regexp": "(www.)?tiemtruyenchu.com/truyen/[^/]+/?$",
     "description": "Đọc truyện trên Tiệm Truyện Chữ",
