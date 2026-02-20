@@ -2,7 +2,7 @@
     "metadata": {
         "name": "Truyện CV IO",
         "author": "Yangio-Thắng vibe",
-        "version": 1,
+        "version": 5,
         "source": "https://truyencv.io",
         "regexp": "truyencv.io/truyen/[^/]+/?$",
         "description": "Đọc truyện trên Truyện CV IO bản mới nhất",
