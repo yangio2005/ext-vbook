@@ -6,3 +6,5 @@ data.json
 history.bak
 .DS_Store
 /metruyenchu/src
+z.chapter-server/node_modules
+z.chapter-server/node_modules_*

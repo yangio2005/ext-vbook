@@ -1,19 +1,19 @@
-load('config.js');
+load("config.js");
 
 function execute(url) {
-    let response = fetch(url);
+    var response = fetch(url);
     if (response.ok) {
-        let doc = response.html();
+        var doc = response.html();
 
         // Thử các selector phổ biến của Tiệm Truyện Chữ
         // Thường là #chapter-content, .chapter-content hoặc div.content
-        let content = doc.select("#chapter-content, .chapter-content, article, .content-inner").first();
+        var content = doc.select("#chapter-content, .chapter-content, article, .content-inner").first();
 
         if (content) {
             // Loại bỏ các phần tử thừa như nút điều hướng, quảng cáo bên trong nội dung
             content.select("script, style, .ads, .social-share, .btn, .breadcrumb, .chapter-nav").remove();
 
-            let html = content.html();
+            var html = content.html();
 
             // Cleanup nội dung
             html = html.replace(/&nbsp;/g, ' ')

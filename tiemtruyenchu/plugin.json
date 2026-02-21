@@ -2,7 +2,7 @@
   "metadata": {
     "name": "Tiệm Truyện Chữ",
     "author": "Yangio-Thắng vibe",
-    "version": 6,
+    "version": 7,
     "source": "https://www.tiemtruyenchu.com",
     "regexp": "(www.)?tiemtruyenchu.com/truyen/[^/]+/?$",
     "description": "Đọc truyện trên Tiệm Truyện Chữ",
