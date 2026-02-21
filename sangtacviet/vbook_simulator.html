@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <title>vBook Engine Simulator</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #1a1a2e;
+            color: #e1e1e1;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 20px;
+        }
+
+        .sidebar {
+            background: #16213e;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .main {
+            background: #16213e;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        h2 {
+            color: #0f3460;
+            background: #e94560;
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 0;
+            font-size: 1.2rem;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            color: #88c0d0;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid #0f3460;
+            background: #1a1a2e;
+            color: white;
+            box-sizing: border-box;
+        }
+
+        button {
+            background: #e94560;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            width: 100%;
+            transition: 0.3s;
+            margin-bottom: 10px;
+        }
+
+        button:hover {
+            background: #ff4d6d;
+            transform: translateY(-2px);
+        }
+
+        #console {
+            background: #000;
+            color: #0f0;
+            padding: 15px;
+            border-radius: 4px;
+            font-family: 'Courier New', Courier, monospace;
+            height: 200px;
+            overflow-y: auto;
+            font-size: 0.85rem;
+            border: 1px solid #333;
+        }
+
+        #result {
+            background: #fff;
+            color: #333;
+            padding: 20px;
+            border-radius: 4px;
+            min-height: 400px;
+            overflow-y: auto;
+        }
+
+        pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        .status {
+            font-size: 0.8rem;
+            color: #4ecca3;
+            margin-top: 5px;
+        }
+
+        iframe#target {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="sidebar">
+            <h2>📜 Scripts</h2>
+            <div class="input-group">
+                <label>Chọn Script để chạy:</label>
+                <select id="scriptType">
+                    <option value="home.js">home.js</option>
+                    <option value="gen.js">gen.js</option>
+                    <option value="search.js">search.js</option>
+                    <option value="detail.js">detail.js</option>
+                    <option value="toc.js">toc.js</option>
+                    <option value="chap.js" selected>chap.js</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label>URL đầu vào:</label>
+                <input type="text" id="targetUrl"
+                    value="https://sangtacviet.vip/truyen/ciweimao/1/100464209/114386813/">
+            </div>
+            <button onclick="runExecute()">▶ CHẠY EXECUTE()</button>
+
+            <hr style="border: 0; border-top: 1px solid #0f3460; margin: 20px 0;">
+
+            <h2>🖥️ Console</h2>
+            <div id="console"></div>
+            <div class="status" id="engineStatus">Ready</div>
+        </div>
+
+        <div class="main">
+            <h2>🖼️ Output Preview</h2>
+            <div id="result">
+                <p style="color: grey; text-align: center;">Chưa có dữ liệu. Hãy chạy script để xem kết quả.</p>
+            </div>
+        </div>
+    </div>
+
+    <iframe id="target"></iframe>
+
+    <script>
+        // --- VBOOK MOCK ENGINE ---
+
+        function sleep(ms) {
+            var start = new Date().getTime();
+            while (new Date().getTime() < start + ms);
+        }
+
+        const Console = {
+            log: function (msg) {
+                const consoleDiv = document.getElementById('console');
+                consoleDiv.innerHTML += `<div>> ${msg}</div>`;
+                consoleDiv.scrollTop = consoleDiv.scrollHeight;
+                console.log("vBook Console:", msg);
+            }
+        };
+
+        const Response = {
+            success: function (data, next) {
+                return { status: "success", data: data, next: next || null };
+            },
+            error: function (msg) {
+                return { status: "error", message: msg };
+            }
+        };
+
+        class BrowserMock {
+            constructor() {
+                this.iframe = document.getElementById('target');
+                this.currentUrl = "";
+            }
+
+            launch(url, timeout) {
+                Console.log(`Launching: ${url}`);
+                this.currentUrl = url;
+                // In a real simulator we might use a proxy, here we just try to load
+                // Note: CORS might block this in a real browser, but this is a simulator concept
+                this.iframe.src = url;
+                sleep(2000); // Simulate network
+                return this.html();
+            }
+
+            launchAsync(url) {
+                Console.log(`Launching Async: ${url}`);
+                this.iframe.src = url;
+            }
+
+            waitUrl(regex, timeout) {
+                Console.log(`Waiting for URL matching: ${regex}`);
+                sleep(2000); // Mock wait
+                return true;
+            }
+
+            html() {
+                try {
+                    const doc = this.iframe.contentDocument || this.iframe.contentWindow.document;
+                    return this._wrapDocument(doc);
+                } catch (e) {
+                    Console.log("Lỗi truy cập Iframe (có thể do CORS): " + e.message);
+                    return null;
+                }
+            }
+
+            callJs(script, wait) {
+                Console.log(`Executing JS: ${script}`);
+                try {
+                    this.iframe.contentWindow.eval(script);
+                } catch (e) { }
+                if (wait) sleep(wait);
+            }
+
+            close() {
+                Console.log("Browser Closed.");
+            }
+
+            _wrapDocument(doc) {
+                const self = this;
+                return {
+                    select: function (selector) {
+                        const elements = doc.querySelectorAll(selector);
+                        return self._wrapElements(elements);
+                    },
+                    html: function () { return doc.documentElement.innerHTML; },
+                    text: function () { return doc.body.innerText; }
+                };
+            }
+
+            _wrapElements(elements) {
+                const self = this;
+                return {
+                    size: function () { return elements.length; },
+                    get: function (i) {
+                        const el = elements[i];
+                        if (!el) return null;
+                        return {
+                            text: function () { return el.innerText; },
+                            html: function () { return el.innerHTML; },
+                            attr: function (name) { return el.getAttribute(name); },
+                            select: function (sel) {
+                                return self._wrapElements(el.querySelectorAll(sel));
+                            },
+                            remove: function () {
+                                if (el.parentNode) el.parentNode.removeChild(el);
+                            }
+                        };
+                    },
+                    remove: function () {
+                        elements.forEach(el => {
+                            if (el.parentNode) el.parentNode.removeChild(el);
+                        });
+                    }
+                };
+            }
+        }
+
+        const Engine = {
+            newBrowser: function () {
+                return new BrowserMock();
+            }
+        };
+
+        // Helper g
+        function g(id) { return document.getElementById(id); }
+
+        // --- EXECUTION LOGIC ---
+
+        async function runExecute() {
+            const scriptFile = document.getElementById('scriptType').value;
+            const url = document.getElementById('targetUrl').value;
+            const resultDiv = document.getElementById('result');
+            const statusDiv = document.getElementById('engineStatus');
+            const consoleDiv = document.getElementById('console');
+
+            consoleDiv.innerHTML = "";
+            resultDiv.innerHTML = "<p style='text-align:center;'>Đang chạy script... Vui lòng kiểm tra Console</p>";
+            statusDiv.innerText = "Running...";
+
+            try {
+                // Fetch the script content
+                const response = await fetch(`./src/${scriptFile}`);
+                let scriptText = await response.text();
+
+                // Clean up the script for browser eval (remove imports if any, though vBook uses global execute)
+                // vBook scripts usually just define function execute(url) { ... }
+
+                Console.log(`Loading script: ${scriptFile}`);
+
+                // Execute the script in global scope
+                const scriptTag = document.createElement('script');
+                scriptTag.text = scriptText;
+                document.body.appendChild(scriptTag);
+
+                // Call the execute function
+                const result = execute(url);
+
+                if (result && result.status === "success") {
+                    if (scriptFile === "chap.js") {
+                        resultDiv.innerHTML = `<div style="padding:10px;">${result.data}</div>`;
+                    } else {
+                        resultDiv.innerHTML = `<pre>${JSON.stringify(result, null, 2)}</pre>`;
+                    }
+                    statusDiv.innerText = "Success!";
+                } else {
+                    resultDiv.innerHTML = `<p style="color:red;">Lỗi hoặc không có dữ liệu trả về.</p><pre>${JSON.stringify(result, null, 2)}</pre>`;
+                    statusDiv.innerText = "Failed";
+                }
+            } catch (e) {
+                Console.log("CRITICAL ERROR: " + e.message);
+                resultDiv.innerHTML = `<p style="color:red;">Error: ${e.message}</p>`;
+                statusDiv.innerText = "Error";
+            }
+        }
+    </script>
+
+</body>
+
+</html>

@@ -2,14 +2,13 @@
     "metadata": {
         "name": "Sáng Tác Việt",
         "author": "vBook",
-        "version": 7,
+        "version": 9,
         "source": "https://sangtacviet.vip",
         "regexp": "(www.)?sangtacviet.(pro|vip|com)/truyen/([a-zA-Z0-9])+/\\d+/\\d+/?$",
-        "description": "",
-        "locale": "vi-VN",
+        "description": "Sáng Tác Việt Extension",
+        "locale": "vi_VN",
         "language": "javascript",
-        "type": "novel",
-        "encrypt": true
+        "type": "novel"
     },
     "script": {
         "home": "home.js",

@@ -20,6 +20,23 @@ function execute(url) {
                 .replace(/<i[^>]*>.*?<\/i>/g, '') // Xóa các icon rác
                 .replace(/<p[^>]*>\s*<\/p>/g, ''); // Xóa các dòng trống thừa
 
+            // Loại bỏ các dòng spam ngắt trang của tác giả / cvt
+            // Ví dụ: ====, ____, >>>>, ....., ------, ~~~~~~, ****
+            html = html.replace(
+                /<p[^>]*>\s*[=_>\.<\-~*]{3,}\s*<\/p>/gi,
+                ''
+            );
+
+            // Loại bỏ các dòng chứa PS, P/S, Note, chú thích của cvt/tg
+            // Ví dụ: ps:/, p/s:, (ps:, note:, [cvt:, [tg:
+            html = html.replace(
+                /<p[^>]*>[^<]*(?:ps\s*[:/]|p\/s\s*[:/]|note\s*[:/]|\[cvt|\[tg|cvt\s*:|tác giả\s*:|【cvt|【tg)[^<]*<\/p>/gi,
+                ''
+            );
+
+            // Loại bỏ các đoạn span/text thuần chỉ chứa ký tự lặp
+            html = html.replace(/([=_>\.\-~*▬─]{3,})/g, '');
+
             return Response.success(html);
         }
     }
