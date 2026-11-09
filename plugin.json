@@ -5,6 +5,17 @@
   },
   "data": [
     {
+      "name": "Yangio Truyện",
+      "author": "yangio",
+      "path": "https://raw.githubusercontent.com/yangio2005/ext-vbook/main/yangiotruyen/plugin.zip",
+      "version": 3,
+      "source": "https://truyentoicungai.web.app",
+      "icon": "https://raw.githubusercontent.com/yangio2005/ext-vbook/main/yangiotruyen/icon.png",
+      "description": "Đọc truyện từ kho Firebase (AI agent đăng tự động)",
+      "type": "vibe novel",
+      "locale": "vi_VN"
+    },
+    {
       "name": "Tiệm Truyện Chữ",
       "author": "Yangio-Thắng vibe",
       "path": "https://raw.githubusercontent.com/yangio2005/ext-vbook/main/tiemtruyenchu/plugin.zip",

@@ -1,0 +1,42 @@
+{
+  "metadata": {
+    "name": "Yangio Truyện",
+    "author": "yangio",
+    "version": 3,
+    "source": "https://truyentoicungai.web.app",
+    "description": "Đọc truyện từ kho Firebase của yangio (AI agent đăng tự động)",
+    "locale": "vi",
+    "regexp": "(https?://)?(www\\.)?truyentoicungai\\.web\\.app/story/[^/?#]+/?$",
+    "type": "novel",
+    "nsfw": false
+  },
+  "script": {
+    "home": "home.js",
+    "explore": "explore.js",
+    "genre": "genre.js",
+    "search": "search.js",
+    "detail": "detail.js",
+    "toc": "toc.js",
+    "chap": "chap.js"
+  },
+  "config": {
+    "DOMAIN": {
+      "title": "Domain web",
+      "default": "https://truyentoicungai.web.app",
+      "mode": "input",
+      "format": "text"
+    },
+    "PROJECT_ID": {
+      "title": "Firebase Project ID",
+      "default": "ant05-efa02",
+      "mode": "input",
+      "format": "text"
+    },
+    "API_KEY": {
+      "title": "Firebase Web API Key",
+      "default": "AIzaSyBpasZ72EgIovTCVHokMpTYiXWdQolB1qc",
+      "mode": "input",
+      "format": "text"
+    }
+  }
+}
