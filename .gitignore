@@ -6,5 +6,31 @@ data.json
 history.bak
 .DS_Store
 /metruyenchu/src
-z.chapter-server/node_modules
-z.chapter-server/node_modules_*
+z.chapter-server/yangio-web/node_modules
+z.chapter-server/yangio-web/node_modules_*# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+yangio-web/node_modules
+yangio-web/dist
+yangio-web/dist-ssr
+yangio-web/*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+yangio-web/.firebase/
+yangio-web/*.log
