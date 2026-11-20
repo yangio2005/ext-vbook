@@ -7,6 +7,7 @@ function execute(query, page) {
     var token = "";
     do {
         var result = listCollection("stories", 300, token);
+        if (result.fsError) return Response.error(result.fsError);
         docs = docs.concat(result.docs);
         token = result.nextPageToken;
     } while (token && docs.length < 500);

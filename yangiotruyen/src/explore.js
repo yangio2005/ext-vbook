@@ -1,6 +1,7 @@
 load('config.js');
 function execute() {
     var result = listCollection("stories", 20, "", "updatedAt");
+    if (result.fsError) return Response.error(result.fsError);
     var docs = sortByUpdatedDesc(result.docs);
 
     var items = [];

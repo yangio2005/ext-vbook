@@ -5,6 +5,7 @@ function execute(url) {
     if (!id || !chapId) return Response.error("URL chương không hợp lệ");
 
     var doc = getDocument("stories/" + id + "/chapters/" + chapId);
+    if (doc && doc.fsError) return Response.error(doc.fsError);
     if (!doc) return Response.error("Không tìm thấy chương");
     var f = doc.fields;
 

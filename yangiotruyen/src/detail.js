@@ -3,6 +3,7 @@ function execute(url) {
     var id = storyIdFromUrl(normalizeUrl(url));
     if (!id) return Response.error("URL không hợp lệ");
     var doc = getDocument("stories/" + id);
+    if (doc && doc.fsError) return Response.error(doc.fsError);
     if (!doc) return Response.error("Không tìm thấy truyện");
     var f = doc.fields;
 

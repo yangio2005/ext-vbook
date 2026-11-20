@@ -1,11 +1,12 @@
 load('config.js');
 function execute() {
     var doc = getDocument("meta/genres");
+    if (doc && doc.fsError) return Response.error(doc.fsError);
     if (!doc) return Response.success([]);
-    var list = decodeArray({ values: genreValues(doc) });
+    var list = genreValues(doc);
     var tabs = [];
     for (var i = 0; i < list.length; i++) {
-        tabs.push({ title: list[i].name, input: list[i].name, script: "search.js" });
+        tabs.push({ title: list[i].name, input: list[i].name, script: "latest.js" });
     }
     return Response.success(tabs);
 }

@@ -24,10 +24,6 @@ try {
 
 var FS_BASE = "https://firestore.googleapis.com/v1/projects/" + PROJECT + "/databases/(default)/documents";
 
-if (typeof console !== "undefined" && console.log) {
-    console.log("[yangio] project=" + PROJECT + " keySet=" + (KEY ? "yes" : "no") + " base=" + BASE_URL);
-}
-
 function normalizeUrl(url) {
     var id = storyIdFromUrl(url);
     if (id) {
@@ -109,11 +105,29 @@ function parseDoc(json) {
     return doc;
 }
 
+function fsMessage(status) {
+    if (status === 504 || !status) {
+        return "Không kết nối được Firestore (HTTP 504) - kiểm tra mạng hoặc firewall chặn firestore.googleapis.com";
+    }
+    if (status === 403) {
+        return "Firestore từ chối truy cập (HTTP 403) - API_KEY sai hoặc rules đã siết quyền đọc";
+    }
+    if (status === 429) {
+        return "Firestore chặn vì quá nhiều request (HTTP 429) - chờ vài giây rồi thử lại";
+    }
+    if (status === 404) return "Không tìm thấy dữ liệu trên Firestore (HTTP 404)";
+    return "Lỗi Firestore HTTP " + status;
+}
+
 function getDocument(path) {
     var response = fetch(fsUrl(path), { timeout: 30000 });
     if (response.status === 404) return null;
-    if (!response.ok) throw new Error("Firestore HTTP " + response.status);
-    return parseDoc(response.json());
+    if (!response.ok) return { fsError: fsMessage(response.status) };
+    try {
+        return parseDoc(response.json());
+    } catch (e) {
+        return { fsError: "Phản hồi Firestore không phải JSON hợp lệ (body rỗng hoặc bị chặn)" };
+    }
 }
 
 function listCollection(path, pageSize, pageToken, orderBy) {
@@ -122,8 +136,13 @@ function listCollection(path, pageSize, pageToken, orderBy) {
     if (orderBy) queries.orderBy = orderBy;
     var response = fetch(fsUrl(path, queries), { timeout: 30000 });
     if (response.status === 404) return { docs: [], nextPageToken: "" };
-    if (!response.ok) throw new Error("Firestore HTTP " + response.status);
-    var json = response.json();
+    if (!response.ok) return { docs: [], nextPageToken: "", fsError: fsMessage(response.status) };
+    var json;
+    try {
+        json = response.json();
+    } catch (e) {
+        return { docs: [], nextPageToken: "", fsError: "Phản hồi Firestore không phải JSON hợp lệ (body rỗng hoặc bị chặn)" };
+    }
     var docs = [];
     var list = json.documents || [];
     for (var i = 0; i < list.length; i++) {

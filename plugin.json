@@ -8,7 +8,7 @@
       "name": "Yangio Truyện",
       "author": "yangio",
       "path": "https://raw.githubusercontent.com/yangio2005/ext-vbook/main/yangiotruyen/plugin.zip",
-      "version": 3,
+      "version": 4,
       "source": "https://truyentoicungai.web.app",
       "icon": "https://raw.githubusercontent.com/yangio2005/ext-vbook/main/yangiotruyen/icon.png",
       "description": "Đọc truyện từ kho Firebase (AI agent đăng tự động)",

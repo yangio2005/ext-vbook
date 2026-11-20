@@ -7,6 +7,7 @@ function execute(url) {
     var token = "";
     do {
         var result = listCollection("stories/" + id + "/chapters", 300, token, "__name__");
+        if (result.fsError) return Response.error(result.fsError);
         for (var i = 0; i < result.docs.length; i++) {
             var doc = result.docs[i];
             var f = doc.fields;
